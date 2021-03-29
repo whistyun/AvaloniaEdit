@@ -42,14 +42,14 @@ namespace AvaloniaEdit.Highlighting.Xshd
             try
             {
                 reader.MoveToContent();
-                //if (reader.NamespaceURI == V2Loader.Namespace)
-                //{
+                if (reader.NamespaceURI == V2Loader.Namespace)
+                {
                     return V2Loader.LoadDefinition(reader, skipValidation);
-                //}
-                //else
-                //{
-                //    return V1Loader.LoadDefinition(reader, skipValidation);
-                //}
+                }
+                else
+                {
+                    return V1Loader.LoadDefinition(reader, skipValidation);
+                }
             }
             catch (XmlException ex)
             {

@@ -106,23 +106,23 @@ namespace AvaloniaEdit.Utils
         #endregion
 
         #region XML reading
-        ///// <summary>
-        ///// Gets the value of the attribute, or null if the attribute does not exist.
-        ///// </summary>
-        //public static string GetAttributeOrNull(this XmlElement element, string attributeName)
-        //{
-        //    XmlAttribute attr = element.GetAttributeNode(attributeName);
-        //    return attr != null ? attr.Value : null;
-        //}
+        /// <summary>
+        /// Gets the value of the attribute, or null if the attribute does not exist.
+        /// </summary>
+        public static string GetAttributeOrNull(this XmlElement element, string attributeName)
+        {
+            XmlAttribute attr = element.GetAttributeNode(attributeName);
+            return attr != null ? attr.Value : null;
+        }
 
-        ///// <summary>
-        ///// Gets the value of the attribute as boolean, or null if the attribute does not exist.
-        ///// </summary>
-        //public static bool? GetBoolAttribute(this XmlElement element, string attributeName)
-        //{
-        //    XmlAttribute attr = element.GetAttributeNode(attributeName);
-        //    return attr != null ? (bool?)XmlConvert.ToBoolean(attr.Value) : null;
-        //}
+        /// <summary>
+        /// Gets the value of the attribute as boolean, or null if the attribute does not exist.
+        /// </summary>
+        public static bool? GetBoolAttribute(this XmlElement element, string attributeName)
+        {
+            XmlAttribute attr = element.GetAttributeNode(attributeName);
+            return attr != null ? (bool?)XmlConvert.ToBoolean(attr.Value) : null;
+        }
 
         /// <summary>
         /// Gets the value of the attribute as boolean, or null if the attribute does not exist.
