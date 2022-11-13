@@ -74,7 +74,7 @@ namespace AvaloniaEdit.Editing
                 if (!ta.IsReadOnly)
                 {
                     e.Client = ta._imClient;
-                }             
+                }
             });
         }
 
@@ -1151,7 +1151,7 @@ namespace AvaloniaEdit.Editing
             public Rect CursorRectangle
             {
                 get
-                {   
+                {
                     if(_textArea == null)
                     {
                         return Rect.Empty;
@@ -1164,7 +1164,16 @@ namespace AvaloniaEdit.Editing
                         return default;
                     }
 
-                    var rect = _textArea.Caret.CalculateCaretRectangle().TransformToAABB(transform.Value);
+                    var caretRectangle = _textArea.Caret.CalculateCaretRectangle();
+                    var scrollPoint = _textArea.TextView.ScrollOffset;
+
+                    var rect = new Rect(
+                                    caretRectangle.X - scrollPoint.X,
+                                    caretRectangle.Y - scrollPoint.Y,
+                                    caretRectangle.Width,
+                                    caretRectangle.Height)
+                               // TODO: Check weither conversion after scrolling is appropriate
+                               .TransformToAABB(transform.Value);
 
                     return rect;
                 }
@@ -1208,6 +1217,9 @@ namespace AvaloniaEdit.Editing
                 {
                     _textArea.Caret.PositionChanged -= Caret_PositionChanged;
                     _textArea.SelectionChanged -= TextArea_SelectionChanged;
+
+                    if (_textArea.TextView != null)
+                        _textArea.TextView.ScrollOffsetChanged -= TextView_ScrollOffsetChanged;
                 }
 
                 _textArea = textArea;
@@ -1216,6 +1228,9 @@ namespace AvaloniaEdit.Editing
                 {
                     _textArea.Caret.PositionChanged += Caret_PositionChanged;
                     _textArea.SelectionChanged += TextArea_SelectionChanged;
+
+                    if (_textArea.TextView != null)
+                        _textArea.TextView.ScrollOffsetChanged += TextView_ScrollOffsetChanged;
                 }
 
                 TextViewVisualChanged?.Invoke(this, EventArgs.Empty);
@@ -1233,6 +1248,11 @@ namespace AvaloniaEdit.Editing
                 SurroundingTextChanged?.Invoke(this, e);
             }
 
+            private void TextView_ScrollOffsetChanged(object sender, EventArgs e)
+            {
+                CursorRectangleChanged?.Invoke(this, e);
+            }
+
             public void SelectInSurroundingText(int start, int end)
             {
                 if(_textArea == null)
@@ -1243,13 +1263,13 @@ namespace AvaloniaEdit.Editing
                 var selection = _textArea.Selection;
 
                 _textArea.Selection = _textArea.Selection.StartSelectionOrSetEndpoint(
-                    new TextViewPosition(selection.StartPosition.Line, start), 
+                    new TextViewPosition(selection.StartPosition.Line, start),
                     new TextViewPosition(selection.StartPosition.Line, end));
             }
 
             public void SetPreeditText(string text)
             {
-              
+
             }
         }
     }
